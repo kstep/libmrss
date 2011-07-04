@@ -1,0 +1,12 @@
+Makefile
+stamp-h1
+*.cache
+config.*
+*.pc
+*.so
+*.o
+*.la
+*.lo
+/doxy.conf
+/libtool
+/src/mrss.h
