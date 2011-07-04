@@ -774,6 +774,7 @@ __mrss_parser_atom (nxml_t * doc, nxml_data_t * cur, mrss_t ** ret)
 {
   mrss_t *data;
   char *c = NULL;
+  char *r = NULL;
 
   if (!(data = malloc (sizeof (mrss_t))))
     return MRSS_ERR_POSIX;
@@ -823,10 +824,18 @@ __mrss_parser_atom (nxml_t * doc, nxml_data_t * cur, mrss_t ** ret)
 				       &data->description_type);
 
 	  /* link href -> link */
-	  else if (!strcmp (cur->value, "link") && !data->link
-		   && (c = nxmle_find_attribute (cur, "href", NULL)))
-	    data->link = c;
+	  else if (!strcmp (cur->value, "link")) {
+                c = nxmle_find_attribute(cur, "href", NULL);
+                if (c) {
+                    r = nxmle_find_attribute(cur, "rel", NULL);
+                    if (r && !strcmp(r, "hub"))
+                        data->hub = c;
+                    else if (!data->link)
+                        data->link = c;
 
+                    if (r) free (r);
+                }
+          }
 	  /* id -> id */
 	  else if (!strcmp (cur->value, "id") && !data->id
 		   && (c = nxmle_get_string (cur, NULL)))
@@ -911,6 +920,7 @@ __mrss_parser_rss (mrss_version_t v, nxml_t * doc, nxml_data_t * cur,
 {
   mrss_t *data;
   char *c, *attr;
+  char *r = NULL;
 
   if (!(data = (mrss_t *) calloc (1, sizeof (mrss_t))))
     return MRSS_ERR_POSIX;
@@ -982,9 +992,18 @@ __mrss_parser_rss (mrss_version_t v, nxml_t * doc, nxml_data_t * cur,
 	    data->description = c;
 
 	  /* link */
-	  else if (!strcmp (cur->value, "link") && !data->link
-		   && (c = nxmle_get_string (cur, NULL)))
-	    data->link = c;
+	  else if (!strcmp (cur->value, "link")) {
+                c = nxmle_find_attribute(cur, "href", NULL);
+                if (c) {
+                    r = nxmle_find_attribute(cur, "rel", NULL);
+                    if (r && !strcmp(r, "hub"))
+                        data->hub = c;
+                    else if (!data->link)
+                        data->link = c;
+
+                    if (r) free (r);
+                }
+          }
 
 	  /* language */
 	  else if (!strcmp (cur->value, "language") && !data->language

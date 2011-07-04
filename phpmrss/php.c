@@ -349,6 +349,7 @@ PHP_FUNCTION (mrss_get) {
   INSERT_STRING(return_value, "description", data->mrss->description);
   INSERT_STRING(return_value, "description_type", data->mrss->description_type);
   INSERT_STRING(return_value, "link", data->mrss->link);
+  INSERT_STRING(return_value, "hub", data->mrss->hub);
   INSERT_STRING(return_value, "id", data->mrss->id);
   INSERT_STRING(return_value, "language", data->mrss->language);
   INSERT_STRING(return_value, "rating", data->mrss->rating);
