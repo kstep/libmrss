@@ -419,6 +419,7 @@ struct mrss_t {
   char *webMaster;		/* O	O	-	O	-	*/
   int ttl;			/* -	-	-	O	-	*/
   char *about;			/* -	-	R	-	-	*/
+  char *hub;
   
   /* Contributor */		/* -	-	-	-	O	*/
   char *contributor;		/* -	-	-	-	R	*/
