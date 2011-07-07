@@ -420,6 +420,7 @@ struct mrss_t {
   int ttl;			/* -	-	-	O	-	*/
   char *about;			/* -	-	R	-	-	*/
   char *hub;
+  char *uri;
   
   /* Contributor */		/* -	-	-	-	O	*/
   char *contributor;		/* -	-	-	-	R	*/

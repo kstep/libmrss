@@ -828,12 +828,20 @@ __mrss_parser_atom (nxml_t * doc, nxml_data_t * cur, mrss_t ** ret)
                 c = nxmle_find_attribute(cur, "href", NULL);
                 if (c) {
                     r = nxmle_find_attribute(cur, "rel", NULL);
-                    if (r && !strcmp(r, "hub"))
-                        data->hub = c;
-                    else if (!data->link)
+                    if (r) {
+                        if (!strcmp(r, "hub")) {
+                            if (!data->hub) data->hub = c;
+                        } else if (!strcmp(r, "self")) {
+                            if (!data->uri) data->uri = c;
+                        } else if (!data->link) {
+                            data->link = c;
+                        }
+                        free (r);
+                    } else if (!data->link) {
                         data->link = c;
-
-                    if (r) free (r);
+                    }
+                } else if (!data->link && (c = nxmle_get_string(cur, NULL))) {
+                    data->link = c;
                 }
           }
 	  /* id -> id */
@@ -996,12 +1004,20 @@ __mrss_parser_rss (mrss_version_t v, nxml_t * doc, nxml_data_t * cur,
                 c = nxmle_find_attribute(cur, "href", NULL);
                 if (c) {
                     r = nxmle_find_attribute(cur, "rel", NULL);
-                    if (r && !strcmp(r, "hub"))
-                        data->hub = c;
-                    else if (!data->link)
+                    if (r) {
+                        if (!strcmp(r, "hub")) {
+                            if (!data->hub) data->hub = c;
+                        } else if (!strcmp(r, "self")) {
+                            if (!data->uri) data->uri = c;
+                        } else if (!data->link) {
+                            data->link = c;
+                        }
+                        free (r);
+                    } else if (!data->link) {
                         data->link = c;
-
-                    if (r) free (r);
+                    }
+                } else if (!data->link && (c = nxmle_get_string(cur, NULL))) {
+                    data->link = c;
                 }
           }
 
