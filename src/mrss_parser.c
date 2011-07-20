@@ -369,10 +369,9 @@ __mrss_parser_atom_entry (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 		   && (c = nxmle_find_attribute (cur, "href", NULL)))
 	    item->link = c;
 
-	  /* content -> description */
-	  else if (!item->description && !strcmp (cur->value, "content"))
-	    __mrss_parser_atom_string (doc, cur, &item->description,
-				       &item->description_type);
+	  else if (!item->content && !strcmp (cur->value, "content"))
+	    __mrss_parser_atom_string (doc, cur, &item->content,
+				       &item->content_type);
 
 	  /* summary -> description */
 	  else if (!item->description && !strcmp (cur->value, "summary"))
@@ -643,6 +642,11 @@ __mrss_parser_rss_item (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 	  else if (!strcmp (cur->value, "link") && !item->link
 		   && (c = nxmle_get_string (cur, NULL)))
 	    item->link = c;
+
+          /* content:encoded -> content */
+          else if (!strcmp (cur->value, "encoded") && !item->content
+                   && (c = nxmle_get_string (cur, NULL)))
+              item->content = c;
 
 	  /* description */
 	  else if (!strcmp (cur->value, "description") && !item->description

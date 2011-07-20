@@ -304,6 +304,8 @@ struct mrss_item_t {
   char *link;			/* R	O	O	O	O	*/
   char *description;		/* R	O	-	O	O	*/
   char *description_type;	/* -	-	-	-	0	*/
+  char *content;
+  char *content_type;
   char *copyright;		/* -	-	-	-	O	*/
   char *copyright_type;		/* -	-	-	-	O	*/
   

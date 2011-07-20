@@ -473,6 +473,8 @@ PHP_FUNCTION (mrss_get) {
     INSERT_STRING(item_zval, "link", ip->link);
     INSERT_STRING(item_zval, "description", ip->description);
     INSERT_STRING(item_zval, "description_type", ip->description_type);
+    INSERT_STRING(item_zval, "content", ip->content);
+    INSERT_STRING(item_zval, "content_type", ip->content_type);
     INSERT_STRING(item_zval, "copyright", ip->copyright);
     INSERT_STRING(item_zval, "copyright_type", ip->copyright_type);
 
