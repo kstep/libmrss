@@ -345,7 +345,7 @@ __mrss_parser_atom_author (nxml_data_t * cur, char **name, char **email,
 static void
 __mrss_parser_atom_entry (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 {
-  char *c;
+  char *c, *r;
   mrss_item_t *item;
 
   if (!(item = malloc (sizeof (mrss_item_t))))
@@ -367,7 +367,19 @@ __mrss_parser_atom_entry (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 	  /* link href -> link */
 	  else if (!item->link && !strcmp (cur->value, "link")
 		   && (c = nxmle_find_attribute (cur, "href", NULL)))
-	    item->link = c;
+          {
+              r = nxmle_find_attribute (cur, "rel", NULL);
+              if (r)
+              {
+                  if (!strcmp (r, "alternate"))
+                      item->link = c;
+                  free (r);
+              }
+              else
+              {
+                  item->link = c;
+              }
+          }
 
 	  else if (!item->content && !strcmp (cur->value, "content"))
 	    __mrss_parser_atom_string (doc, cur, &item->content,

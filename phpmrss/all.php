@@ -8,7 +8,8 @@ function check ($a) {
     exit;
   }
 }
-$data=mrss_parse_url("http://ngvision.org/rss");
+//$data=mrss_parse_url("http://ngvision.org/rss");
+$data=mrss_parse_url("http://feeds.feedburner.com/9to5Chic");
 check($data);
 print_r (mrss_get($data));
 ?>
