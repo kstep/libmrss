@@ -128,20 +128,59 @@ PHP_FUNCTION (mrss_parse_url)
   RETURN_LONG((long)data);
 }
 
+inline long php_array_get_long(HashTable *array, const char *key, long defval)
+{
+    zval *data;
+    int key_len = strlen(key);
+    if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
+        return defval;
+    return Z_LVAL_P(data);
+}
+
+inline char* php_array_get_string(HashTable *array, const char *key, char* defval)
+{
+    zval *data;
+    char *result;
+    int result_len, key_len = strlen(key);
+
+    if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
+        return defval;
+
+    result = Z_STRVAL_P(data);
+    result_len = Z_STRLEN_P(data);
+    result[result_len] = '\0';
+    return result;
+}
+
 PHP_FUNCTION (mrss_parse_url_with_options)
 {
   char *url;
   int url_len;
   struct phpmrss_data *data;
-  mrss_options_t *options;
+  struct mrss_options_t options;
 
-  if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sl", &url,&url_len, &options) == FAILURE) return;
+  HashTable *options_hash;
+  zval *options_val, *option;
+
+  if(zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "sa", &url,&url_len, &options_val) == FAILURE) return;
+
+  options_hash = Z_ARRVAL_P(options_val);
 
   data=(struct phpmrss_data *)malloc(sizeof(struct phpmrss_data));
   memset(data, 0, sizeof(struct phpmrss_data));
   strcpy(data->magic_code, PHP_MRSS_EXTNAME);
 
-  if((data->error=mrss_parse_url_with_options(url, &data->mrss, options))!=MRSS_OK)
+  options.timeout              = php_array_get_long(options_hash, "timeout", 10);
+  options.proxy                = php_array_get_string(options_hash, "proxy", "");
+  options.proxy_authentication = php_array_get_string(options_hash, "proxy_authentication", "");
+  options.certfile             = php_array_get_string(options_hash, "certfile", "");
+  options.cacert               = php_array_get_string(options_hash, "cacert", "");
+  options.password             = php_array_get_string(options_hash, "password", "");
+  options.verifypeer           = php_array_get_long(options_hash, "verifypeer", 1);
+  options.authentication       = php_array_get_string(options_hash, "authentication", "");
+  options.user_agent           = php_array_get_string(options_hash, "user_agent", "");
+
+  if((data->error=mrss_parse_url_with_options(url, &data->mrss, &options))!=MRSS_OK)
 	  data->mrss=NULL;
   
   RETURN_LONG((long)data);
