@@ -157,7 +157,7 @@ PHP_FUNCTION (mrss_parse_url_with_options)
   char *url;
   int url_len;
   struct phpmrss_data *data;
-  struct mrss_options_t options;
+  mrss_options_t *options;
 
   HashTable *options_hash;
   zval *options_val, *option;
@@ -170,18 +170,21 @@ PHP_FUNCTION (mrss_parse_url_with_options)
   memset(data, 0, sizeof(struct phpmrss_data));
   strcpy(data->magic_code, PHP_MRSS_EXTNAME);
 
-  options.timeout              = php_array_get_long(options_hash, "timeout");
-  options.proxy                = php_array_get_string(options_hash, "proxy");
-  options.proxy_authentication = php_array_get_string(options_hash, "proxy_authentication");
-  options.certfile             = php_array_get_string(options_hash, "certfile");
-  options.cacert               = php_array_get_string(options_hash, "cacert");
-  options.password             = php_array_get_string(options_hash, "password");
-  options.verifypeer           = php_array_get_long(options_hash, "verifypeer");
-  options.authentication       = php_array_get_string(options_hash, "authentication");
-  options.user_agent           = php_array_get_string(options_hash, "user_agent");
+  options = mrss_options_new(
+      php_array_get_long(options_hash, "timeout"),
+      php_array_get_string(options_hash, "proxy"),
+      php_array_get_string(options_hash, "proxy_authentication"),
+      php_array_get_string(options_hash, "certfile"),
+      php_array_get_string(options_hash, "password"),
+      php_array_get_string(options_hash, "cacert"),
+      php_array_get_long(options_hash, "verifypeer"),
+      php_array_get_string(options_hash, "authentication"),
+      php_array_get_string(options_hash, "user_agent"));
 
-  if((data->error=mrss_parse_url_with_options(url, &data->mrss, &options))!=MRSS_OK)
+  if((data->error=mrss_parse_url_with_options(url, &data->mrss, options))!=MRSS_OK)
 	  data->mrss=NULL;
+
+  mrss_options_free(options);
   
   RETURN_LONG((long)data);
 }
