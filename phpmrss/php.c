@@ -128,23 +128,23 @@ PHP_FUNCTION (mrss_parse_url)
   RETURN_LONG((long)data);
 }
 
-inline long php_array_get_long(HashTable *array, const char *key, long defval)
+inline long php_array_get_long(HashTable *array, const char *key)
 {
     zval *data;
     int key_len = strlen(key);
     if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
-        return defval;
+        return 0;
     return Z_LVAL_P(data);
 }
 
-inline char* php_array_get_string(HashTable *array, const char *key, char* defval)
+inline char* php_array_get_string(HashTable *array, const char *key)
 {
     zval *data;
     char *result;
     int result_len, key_len = strlen(key);
 
     if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
-        return defval;
+        return NULL;
 
     result = Z_STRVAL_P(data);
     result_len = Z_STRLEN_P(data);
@@ -170,15 +170,15 @@ PHP_FUNCTION (mrss_parse_url_with_options)
   memset(data, 0, sizeof(struct phpmrss_data));
   strcpy(data->magic_code, PHP_MRSS_EXTNAME);
 
-  options.timeout              = php_array_get_long(options_hash, "timeout", 10);
-  options.proxy                = php_array_get_string(options_hash, "proxy", "");
-  options.proxy_authentication = php_array_get_string(options_hash, "proxy_authentication", "");
-  options.certfile             = php_array_get_string(options_hash, "certfile", "");
-  options.cacert               = php_array_get_string(options_hash, "cacert", "");
-  options.password             = php_array_get_string(options_hash, "password", "");
-  options.verifypeer           = php_array_get_long(options_hash, "verifypeer", 1);
-  options.authentication       = php_array_get_string(options_hash, "authentication", "");
-  options.user_agent           = php_array_get_string(options_hash, "user_agent", "");
+  options.timeout              = php_array_get_long(options_hash, "timeout");
+  options.proxy                = php_array_get_string(options_hash, "proxy");
+  options.proxy_authentication = php_array_get_string(options_hash, "proxy_authentication");
+  options.certfile             = php_array_get_string(options_hash, "certfile");
+  options.cacert               = php_array_get_string(options_hash, "cacert");
+  options.password             = php_array_get_string(options_hash, "password");
+  options.verifypeer           = php_array_get_long(options_hash, "verifypeer");
+  options.authentication       = php_array_get_string(options_hash, "authentication");
+  options.user_agent           = php_array_get_string(options_hash, "user_agent");
 
   if((data->error=mrss_parse_url_with_options(url, &data->mrss, &options))!=MRSS_OK)
 	  data->mrss=NULL;
