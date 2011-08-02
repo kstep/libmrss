@@ -130,25 +130,31 @@ PHP_FUNCTION (mrss_parse_url)
 
 inline long php_array_get_long(HashTable *array, const char *key)
 {
-    zval *data;
+    zval **data;
     int key_len = strlen(key);
+    long result;
+
     if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
         return 0;
-    return Z_LVAL_P(data);
+
+    result = Z_LVAL_PP(data);
+    /*printf("got key %s = %d\n", key, result);*/
+    return result;
 }
 
 inline char* php_array_get_string(HashTable *array, const char *key)
 {
-    zval *data;
+    zval **data;
     char *result;
     int result_len, key_len = strlen(key);
 
     if (zend_hash_find(array, key, key_len + 1, (void **)&data) == FAILURE)
         return NULL;
 
-    result = Z_STRVAL_P(data);
-    result_len = Z_STRLEN_P(data);
+    result = Z_STRVAL_PP(data);
+    result_len = Z_STRLEN_PP(data);
     result[result_len] = '\0';
+    /*printf("got key %s = '%s' (%d)\n", key, result, result_len);*/
     return result;
 }
 
