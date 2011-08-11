@@ -656,8 +656,9 @@ __mrss_parser_rss_item (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
 	    item->link = c;
 
           /* content:encoded -> content */
-          else if (!strcmp (cur->value, "encoded") && !item->content
-                   && (c = nxmle_get_string (cur, NULL)))
+          else if (!strcmp (cur->value, "encoded") && cur->ns
+                  && !strcmp (cur->ns->ns, "http://purl.org/rss/1.0/modules/content/")
+                  && !item->content && (c = nxmle_get_string (cur, NULL)))
               item->content = c;
 
 	  /* description */
