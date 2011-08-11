@@ -661,6 +661,33 @@ __mrss_parser_rss_item (nxml_t * doc, nxml_data_t * cur, mrss_t * data)
                   && !item->content && (c = nxmle_get_string (cur, NULL)))
               item->content = c;
 
+          /* media:* -> enclosure */
+          else if (cur->ns && !strcmp(cur->ns->ns, "http://search.yahoo.com/mrss/"))
+          {
+              if (!strcmp (cur->value, "description") || !strcmp (cur->value, "title"))
+              {
+                  if (!item->enclosure)
+                      item->enclosure = nxmle_get_string (cur, NULL);
+              }
+
+              else if (!strcmp (cur->value, "content") && !item->enclosure_url)
+              {
+                  if ((attr = nxmle_find_attribute (cur, "url", NULL)))
+                      item->enclosure_url = attr;
+
+                  if ((attr = nxmle_find_attribute (cur, "type", NULL)))
+                      item->enclosure_type = attr;
+                  else if ((attr = nxmle_find_attribute (cur, "medium", NULL)))
+                      item->enclosure_type = attr;
+
+                  if ((attr = nxmle_find_attribute (cur, "fileSize", NULL)))
+                  {
+                      item->enclosure_length = atoi (attr);
+                      free (attr);
+                  }
+              }
+          }
+
 	  /* description */
 	  else if (!strcmp (cur->value, "description") && !item->description
 		   && (c = nxmle_get_string (cur, NULL)))
