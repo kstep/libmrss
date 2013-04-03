@@ -58,7 +58,7 @@ REGISTER_LONG_CONSTANT("MRSS_ERR_DATA", MRSS_ERR_DATA, CONST_CS | CONST_PERSISTE
 return SUCCESS;
 }
 
-static function_entry mrss_functions[] = {
+static zend_function_entry mrss_functions[] = {
   PHP_FE (mrss_parse_url, NULL) 
   PHP_FE (mrss_parse_url_with_options, NULL) 
   PHP_FE (mrss_parse_file, NULL) 
