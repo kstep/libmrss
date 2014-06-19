@@ -83,7 +83,6 @@ src/mrss.h
 src/Makefile
 test/Makefile
 doc/Makefile
-phpmrss/Makefile
 mrss.pc
 doxy.conf
 ])
