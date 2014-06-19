@@ -1,5 +1,0 @@
-debian/tmp/usr/include/*
-debian/tmp/usr/lib/libmrss.la
-debian/tmp/usr/lib/libmrss.a
-debian/tmp/usr/lib/libmrss.so
-debian/tmp/usr/lib/pkgconfig/*
