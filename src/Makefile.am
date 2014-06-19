@@ -10,7 +10,7 @@ libmrss_la_SOURCES = \
 	mrss_options.c \
 	mrss_search.c
 
-libmrss_la_LDFLAGS = -version-info @LIBMRSS_VERSION_INFO@
+libmrss_la_LDFLAGS = -version-info @LIBMRSS_STRIPPED_VERSION_INFO@
 
 EXTRA_DIST = mrss.h.in mrss.h mrss_internal.h
 

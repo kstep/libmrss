@@ -3,8 +3,8 @@ exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=@includedir@
 
-Name: libmrss
-Description: library C for creating, parsing and writing feed rss
+Name: libmrss-stripped
+Description: library C for parsing rss feed
 Version: @VERSION@
 Requires: nxml
 Libs: -L${libdir} -lmrss
