@@ -10,3 +10,7 @@ config.*
 /doxy.conf
 /libtool
 /src/mrss.h
+/src/.deps
+/test/.deps
+*.*~
+
